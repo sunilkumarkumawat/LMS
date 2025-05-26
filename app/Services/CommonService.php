@@ -215,6 +215,7 @@ public function getAll(string $modal)
             return response()->json([
                 'error' => 'Error: ' . $e->getMessage()
             ], 500);
+            
         }
     }
 
