@@ -1,5 +1,5 @@
 @php
-    $setting = DB::table('settings')->get()->first();
+$setting = DB::table('settings')->get()->first();
 @endphp
 
 <!DOCTYPE html>
@@ -35,6 +35,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="{{ URL::asset('public/assets/school/js/jquery.min.js') }}"></script>
     <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>-->
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap4.min.css">
+
+    <!-- Toastr for notifications -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+
 </head>
 <style>
     .centered_flex {
@@ -113,7 +122,7 @@
 
 
 @php
-    $cur_route = Route::getFacadeRoot()->current()->uri();
+$cur_route = Route::getFacadeRoot()->current()->uri();
 @endphp
 
 <body class="sidebar-mini layout-fixed sidebar-collapse">
@@ -122,9 +131,9 @@
 
         @include('layout.header')
         @if (Session()->get('role_id') == 3)
-            @include('layout.student_sidebar')
+        @include('layout.student_sidebar')
         @else
-            @include('layout.sidebar')
+        @include('layout.sidebar')
         @endif
         @include('layout.message')
         @yield('content')
@@ -675,11 +684,6 @@
                                     }
                                     break;
 
-                                case 'expense_date':
-                                    if (value === '') {
-                                        message = 'Expense date is required';
-                                    }
-                                    break;
 
                                 case 'quantity':
                                     if (value === '') {
@@ -722,6 +726,45 @@
                                         message = 'Amount is required';
                                     }
                                     break;
+
+                                case 'message_type_id':
+                                    if (value === '') {
+                                        message = 'Message Type is required';
+                                    }
+                                    break;
+
+                                case 'title':
+                                    if (value === '') {
+                                        message = 'Title Type is required';
+                                    }
+                                    break;
+
+                                case 'whatsapp_content':
+                                    if (value === '') {
+                                        message = 'Whatsapp content is required';
+                                    }
+                                    break;
+
+                                case 'type_name':
+                                    if (value === '') {
+                                        message = 'Whatsapp type name is required';
+                                    }
+                                    break;
+
+                                case 'locker_name':
+                                    if (value === '') {
+                                        message = 'Locker number is required';
+                                    }
+                                    break;
+
+                                case 'date':
+                                    if (value === '') {
+                                        message = 'date is required';
+                                    }
+                                    break;
+
+
+
                             }
 
 
@@ -762,11 +805,10 @@
                         contentType: false, // Required for FormData
                         success: function(response) {
 
-                            if(response.method == 'update')
-                        {
-                            window.location.href = "{{url('/')}}/"+(response.modal).toLowerCase();
-                            return
-                        }
+                            if (response.method == 'update') {
+                                window.location.href = "{{url('/')}}/" + (response.modal).toLowerCase();
+                                return
+                            }
                             console.log(response);
                             $form[0].reset();
                             toastr.success('Form Submitted Successfully');
@@ -1016,7 +1058,8 @@
 
                         <div class="col-md-12">
                             <p id="whatsapp_error_message" class="error_message_whatsapp">
-                                {{ Session::get('whatsapp_error') ?? '' }}</p>
+                                {{ Session::get('whatsapp_error') ?? '' }}
+                            </p>
                             <input type="hidden" id="whatsapp_error_respose_id"
                                 value="{{ Session::get('whatsapp_error_respose_id') ?? '' }}">
                         </div>
@@ -1048,6 +1091,27 @@
 
             }
         </style>
-</body>
+
+
+
+        <!-- ✅ Moment.js -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+
+        <!-- ✅ DataTables JS only once -->
+
+        <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
+        <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+        <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap4.min.js"></script>
+
+        <!-- ✅ Toastr -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+        <!-- ✅ DataTable Init -->
+        <script>
+            $(document).ready(function() {
+                $('#userTable').DataTable();
+            });
+        </script>
+
 
 </html>

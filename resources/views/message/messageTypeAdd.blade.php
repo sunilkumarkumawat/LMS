@@ -15,12 +15,12 @@
                 </div>
             </div>                                  
 
-            <form id="quickForm" action="messageType" method="post">
+            <form id="createCommon" action="messageType" method="post">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
         		<div class="row m-2">
                     <div class="col-md-12">
-        				<label class="text-danger">Message Type Name *</label>
-        				<input type="text" class="form-control" id="name" name="name" placeholder="Message Type Name" value="" onkeydown="return /[a-zA-Z ]/i.test(event.key)">
+        				<label for="type_name">Message Type Name <span class="text-danger">*</span></label>
+        				<input type="text" class="form-control" id="type_name" name="type_name" placeholder="Message Type Name" value="" data-required="true" onkeydown="return /[a-zA-Z ]/i.test(event.key) ">
         			</div>
                 </div>
                 <div class="row m-2">

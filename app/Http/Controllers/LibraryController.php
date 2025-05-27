@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Api\ApiController;
+
 
 Class LibraryController extends Controller
 
@@ -20,23 +23,23 @@ Class LibraryController extends Controller
     }
 
    public function billadd(){
-    return view('library_management.billing');
+    return view('librarycabin.billing');
    }
 
    public function subscription(){
-    return view('library_management.subscription');
+    return view('librarycabin.subscription');
    }
 
    public function duefees(){
-    return view('library_management.due');
+    return view('librarycabin.due');
    }
 
    public function wallet(){
-    return view('library_management.wallet');
+    return view('librarycabin.wallet');
    }
 
    public function walletlist(){
-    return view('library_management.walletlist');
+    return view('librarycabin.walletlist');
    }
 
    public function print(){

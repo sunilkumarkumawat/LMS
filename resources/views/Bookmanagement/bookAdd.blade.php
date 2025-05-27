@@ -44,7 +44,7 @@
 
                                             <div class="col-md-6 col-12">
                                                 <div class="form-group">
-                                                    <label class="text-danger" for="library_id">Library Select*</label>
+                                                    <label for="library_id">Library Select<span class="text-danger">*</span></label>
                                                     <select class="form-control" id="library_id" name="library_id"
                                                         placeholder="Select Library" data-required="true">
                                                         <option value="">Select</option>
@@ -55,7 +55,7 @@
 
                                             <div class="col-md-6 col-12">
                                                 <div class="form-group">
-                                                    <label class="text-danger" for="book_code">Barcode NO*</label>
+                                                    <label for="book_code">Barcode NO<span class="text-danger">*</span></label>
                                                     <input class="form-control " type="text" id="barcode_no"
                                                         name="barcode_no" placeholder="Barcode NO">
                                                 </div>
@@ -63,7 +63,7 @@
 
 
                                             <div class="col-md-6 col-12">
-                                                <label class="text-danger" for="book_name">Book Name*</label>
+                                                <label  for="book_name">Book Name<span class="text-danger">*</span></label>
                                                 <input class="form-control invalid" type="text" id="book_name"
                                                     name="book_name" placeholder="Book Name" data-required="true">
                                             </div>
@@ -78,9 +78,9 @@
                                                     placeholder="Publisher Name">
                                             </div>
                                             <div class="col-md-6 col-12">
-                                                <label class="text-danger" for="date">Date*</label>
+                                                <label for="date">Date<span class="text-danger">*</span></label>
                                                 <input class="form-control" type="date" id="date" name="date"
-                                                    placeholder="date">
+                                                    placeholder="date" data-required="true" >
                                             </div>
 
                                             <div class="col-md-6 col-12">
@@ -108,9 +108,9 @@
                                             </div>
 
                                             <div class="col-md-6 col-12">
-                                                <label class="text-danger" for="quantity">Quantity</label>
+                                                <label for="quantity">Quantity<span class="text-danger">*</span></label>
                                                 <input class="form-control" type="int" id="quantity"
-                                                    name="quantity" placeholder="Quantity">
+                                                    name="quantity" placeholder="Quantity" data-required="true" >
                                             </div>
 
                                             <div class="col-md-6">

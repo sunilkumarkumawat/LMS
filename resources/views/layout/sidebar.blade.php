@@ -163,7 +163,7 @@
                              </a>
                          </li>
                          <li class="nav-item">
-                             <a href="{{ url('wallet') }}" class="nav-link">
+                             <a href="{{ url('walletlist') }}" class="nav-link">
                                  <i class="fa fa-money nav-icon"></i>
                                  <p>Wallet</p>
                              </a>

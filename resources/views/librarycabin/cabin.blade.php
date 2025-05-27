@@ -47,7 +47,7 @@
                                                                 class="text-danger">*</span></label>
                                                         <input type="text" class="form-control" id="cabin_name"
                                                             data-required="true" name="cabin_name"
-                                                            placeholder="Enter Cabin no">
+                                                            placeholder="Enter Cabin no"  >
                                                     </div>
                                                 </div>
                                             </div>
@@ -67,8 +67,7 @@
                                             <div class="row ">
                                                 <div class="col-md-12 col-12">
                                                     <div class="form-group">
-                                                        <label for="locker_name">Locker No<span
-                                                                class="text-danger">*</span></label>
+                                                        <label for="locker_name">Locker No<span class="text-danger">*</span></label>
                                                         <input type="text" class="form-control" id="locker_name"
                                                             name="locker_name" placeholder="Enter Locker no"
                                                             data-required="true">

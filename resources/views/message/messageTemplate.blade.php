@@ -17,12 +17,12 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <form id="quickForm" action="messageTemplate" method="post">
+                                <form id="createCommon" action="messageTemplate" method="post">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <label class="text-danger">Message Type *</label>
+                                            <label for="message_type_id" >Message Type <span class="text-danger">*</span></label>
                                             <select class="form-control " name="message_type_id"
-                                                id="message_type_id">
+                                                id="message_type_id" data-required="true">
                                                 <option value="">Select</option>
                                                 <option value="1">Type 1</option>
                                                 <option value="2">Type 2</option>
@@ -30,14 +30,14 @@
                                             </select>
                                         </div>
                                         <div class="col-md-12 mt-2">
-                                            <label class="text-danger">Subject/ Title Name*</label>
+                                            <label for="title" >Subject/ Title Name<span class="text-danger">*</span></label></label>
                                             <input class="form-control" type="text" name="title" id="title"
-                                                placeholder="Message Title" value="">
+                                                placeholder="Message Title" value="" data-required="true">
                                         </div>
                                         <div class="col-md-12 pt-2">
                                             <div class="form-group">
                                                 <div>
-                                                    <label class="text-danger"><b>E-mail Content*</b></label>
+                                                    <label><b>E-mail Content<span class="text-danger"></span></label></b></label>
                                                 </div>
                                                 <textarea type="text" class="form-control pad" id="editor1" name="email_content" value=""
                                                     placeholder="E-mail Content" rows="5"></textarea>
@@ -74,9 +74,9 @@
                                         </div>
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label><b>Whatsapp Content</b></label>
+                                                <label for="whatsapp_content" ><b>Whatsapp Content<span class="text-danger">*</span></label></b></label>
                                                 <textarea type="text" class="form-control pad" id="whatsapp_content" name="whatsapp_content" value=""
-                                                    placeholder="Whatsapp Content" rows="5"></textarea>
+                                                    placeholder="Whatsapp Content" rows="5" data-required="true" ></textarea>
                                                 <div>
                                                     <label><b>Whatsapp Status</b></label>
                                                     <label class="switch_check">

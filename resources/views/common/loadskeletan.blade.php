@@ -1,19 +1,14 @@
- @php
-    $loopCount = $loopCount ?? 'default_name';
-   
+@php
+    $columns = 10;
+    $loopCount = $loopCount ?? 6;
 @endphp
- 
- @for ($i = 0; $i < $loopCount; $i++)
-     <tr>
-         <td class="placeholder-wave" style="padding:16px">
-             <div class="placeholder rounded" style="width:99%; height:20px; background:#0000001f; padding:10px">
-             </div>
-         </td>
-         <td class="placeholder-wave" style="padding:16px">
-             <div class="placeholder rounded" style="width:99%; height:20px; background:#00000038"></div>
-         </td>
-         <td class="placeholder-wave" style="padding:16px" colspan='100%'>
-             <div class="placeholder rounded" style="width:99%; height:20px; background:#00000045"></div>
-         </td>
-     </tr>
- @endfor
+
+@for ($i = 0; $i < $loopCount; $i++)
+<tr>
+    @for ($j = 0; $j < $columns; $j++)
+    <td class="placeholder-wave" style="padding:16px">
+        <div class="placeholder rounded" style="width:99%; height:20px; background:#0000001f;"></div>
+    </td>
+    @endfor
+</tr>
+@endfor
