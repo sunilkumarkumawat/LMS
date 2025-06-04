@@ -92,8 +92,12 @@
         <li class="nav-item dropdown">
             <select class="selectDesign form-control-sm" id="headerBranchSelect">
                 @if (!empty($getBranch))
+                @if(Auth::user()->role_id == 1)
+                 <option value='-1' >All</option>
+
+                 @endif
                    @foreach ($getBranch as $item)
-                        <option value='{{ $item->id }}'>{{ $item->branch_name ?? '' }}</option>
+                        <option value='{{ $item->id }}' {{Auth::user()->selectedBranchId == $item->id ? 'selected' : '' }}>{{ $item->name ?? '' }}</option>
                     @endforeach
                 @endif
             </select>

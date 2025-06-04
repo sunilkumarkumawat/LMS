@@ -26,8 +26,10 @@ Route::post('/loginAuth', function (Request $request) {
         return response()->json(['message' => 'Invalid credentials'], 401);
     }
 
+//   session(['currentSelectedBranch' => $user->selectedBranchId ?? null]);
     // Laravel login to create session (for Blade)
      Auth::login($user); // ✅ session-based login
+
 
 
     $token = $user->createToken('api-token')->plainTextToken;
@@ -55,6 +57,8 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], 'common-status-change/{model}/{id}', 'SharesController@changeStatusCommon');
     Route::match(['delete'], 'common-delete/{model}/{id}', 'SharesController@deleteCommon');
     Route::match(['get','post'], '/get-dependent-options', 'SharesController@getDependentOptions');
+    Route::match(['get','post'], '/set-current-branch', 'SharesController@setCurrentBranch');
+    Route::match(['get','post'], '/set-permission-view/{roleId}', 'SharesController@setPermissionView');
 
     
 
