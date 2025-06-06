@@ -502,6 +502,14 @@
 
 
                             switch (name) {
+
+                               case 'branch_id':
+                                    if (value === '') {
+                                        message = 'Branch id is required.';
+                                    }
+                                    break;
+ 
+
                                 case 'email':
                                     if (!/^\S+@\S+\.\S+$/.test(value)) {
                                         message = 'Please enter a valid email address.';

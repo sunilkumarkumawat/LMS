@@ -64,10 +64,10 @@
                                         <div class="circle step-circle">2</div>
                                         <small class="d-block">Additional Details</small>
                                     </div>
-                                    <div class="wizard-step-indicator text-center flex-fill">
+                                    <!-- <div class="wizard-step-indicator text-center flex-fill">
                                         <div class="circle step-circle">3</div>
                                         <small class="d-block">Permissions</small>
-                                    </div>
+                                    </div> -->
                                     <div class="step-line position-absolute w-100"
                                         style="top: 12px; left: 0; height: 2px; background: #dee2e6; z-index: 0;"></div>
                                 </div>
@@ -278,12 +278,12 @@
                                             </div>
 
                                             <!-- Step 3: Permissions -->
-                                            <div id="step-3" class="wizard-step d-none">
+                                            <!-- <div id="step-3" class="wizard-step d-none">
                                                 <h5><i class="fa fa-lock"></i> User Permissions</h5>
                                                 <div class="row">
                                                     {{-- Permissions content here (if needed) --}}
                                                 </div>
-                                            </div>
+                                            </div> -->
 
                                             <!-- Navigation Buttons -->
                                             <div class="card-footer text-center bg-transparent">
@@ -308,7 +308,7 @@
     <!-- JS Script -->
     <script>
         let currentStep = 1;
-        const totalSteps = 3;
+        const totalSteps = 2;
 
         function showStep(step) {
             document.querySelectorAll('.wizard-step').forEach(el => el.classList.add('d-none'));
@@ -368,3 +368,5 @@
         }
     </script>
 @endsection
+
+
