@@ -452,32 +452,7 @@
                     e.preventDefault();
 
 
-                    $('.dataContainer').each(function() {
-                        const $row = $(`
-                                    <tr class="placeholder-row" style="display:none">
-                                    <td class="placeholder-wave" style="padding:16px">
-                                        <div class="placeholder rounded" style="width:99%; height:20px; background:#0000001f; padding:10px"></div>
-                                    </td>
-                                    <td class="placeholder-wave" style="padding:16px">
-                                        <div class="placeholder rounded" style="width:99%; height:20px; background:#00000038"></div>
-                                    </td>
-                                    <td class="placeholder-wave" style="padding:16px" colspan="100%">
-                                        <div class="placeholder rounded" style="width:99%; height:20px; background:#00000045"></div>
-                                    </td>
-                                    </tr>
-                                `);
-
-                        // Prepend and fade in
-                        $(this).prepend($row);
-                        $row.fadeIn(300);
-
-                        // Fade out after a short delay, then remove
-                        setTimeout(() => {
-                            $row.fadeOut(500, function() {
-                                $(this).remove();
-                            });
-                        }, 500); // Adjust delay as needed (1500ms = 1.5s)
-                    });
+                    
 
                     // // Get branch_id just before submission
                     // const selectedBranchId = $('#headerBranchSelect').val();
@@ -775,6 +750,8 @@
                     }
 
 
+
+
                     // Optional helper to format field names like "mobile_no" to "Mobile No"
                     function formatFieldName(name) {
                         return name
@@ -784,10 +761,45 @@
 
                     const $form = $(this);
                     if (!validateForm($form)) return;
+
+
+                    const currentstep = $(this).attr('data-step') || 1 ;
+                    const totalsteps = $(this).attr('data-total_steps') || 1 ;
+
+                    if(currentstep !== totalsteps)
+                    {
+                        return
+                    }
+                    $('.dataContainer').each(function() {
+                        const $row = $(`
+                                    <tr class="placeholder-row" style="display:none">
+                                    <td class="placeholder-wave" style="padding:16px">
+                                        <div class="placeholder rounded" style="width:99%; height:20px; background:#0000001f; padding:10px"></div>
+                                    </td>
+                                    <td class="placeholder-wave" style="padding:16px">
+                                        <div class="placeholder rounded" style="width:99%; height:20px; background:#00000038"></div>
+                                    </td>
+                                    <td class="placeholder-wave" style="padding:16px" colspan="100%">
+                                        <div class="placeholder rounded" style="width:99%; height:20px; background:#00000045"></div>
+                                    </td>
+                                    </tr>
+                                `);
+
+                        // Prepend and fade in
+                        $(this).prepend($row);
+                        $row.fadeIn(300);
+
+                        // Fade out after a short delay, then remove
+                        setTimeout(() => {
+                            $row.fadeOut(500, function() {
+                                $(this).remove();
+                            });
+                        }, 500); // Adjust delay as needed (1500ms = 1.5s)
+                    });
                     const endpoint = "{{ url('/') }}/createCommon";
 
                     const formData = new FormData(this); // Handles files + inputs
-
+                 const modaltype = $('[name="modal_type"]').val();
                     $.ajax({
                         url: endpoint,
                         type: 'POST',
@@ -797,14 +809,26 @@
                         success: function(response) {
 
                             if (response.method == 'update') {
+                                if(modaltype == 'User'){
+                                 window.location.href = "{{ url('/') }}/" + 'userView'
+                                  
+                            }
+                            else{
                                 window.location.href = "{{ url('/') }}/" + (response.modal)
                                     .toLowerCase();
                                 return
                             }
+                            }
+                            else if(modaltype == 'User'){
+                                 window.location.href = "{{ url('/') }}/" + 'userView'
+                                  
+                            }
+                            else{
                             console.log(response);
                             $form[0].reset();
                             toastr.success('Form Submitted Successfully');
                             dataGet();
+                            }
                         },
                         error: function(xhr) {
                             alert('Failed to submit form.');
@@ -829,57 +853,55 @@
         }
     });
 
-    modalTypes.forEach(modal => {
-        const containerId = `#dataContainer-${modal.toLowerCase()}`;
-        const url = `${baseUrl}/commonView/${modal}`;
+ modalTypes.forEach(modal => {
+    const containerId = `#dataContainer-${modal.toLowerCase()}`;
+    const url = `${baseUrl}/commonView/${modal}`;
 
-        $.get(url, function (data) {
-            const $container = $(containerId);
+    $.get(url, function (data) {
+        const $container = $(containerId);
 
-            $container.fadeOut(100, function () {
-                $container.html(data).fadeIn(200);
+        $container.fadeOut(100, function () {
+            $container.html(data).fadeIn(200);
 
-                // Wait for new content to be inserted before initializing DataTable
-                // const table = $container.find('table');
-                const table = $("#dataContainer");
+            // Find the table inside the container (assuming one table per container)
+            const $table = $container.find('table');
 
+            // Check if DataTable already initialized and destroy it
+            if ($.fn.DataTable.isDataTable($table)) {
+                $table.DataTable().destroy();
+            }
 
-
-                // Check if a DataTable is already initialized, destroy it
-                if ($.fn.DataTable.isDataTable(table)) {
-                    table.DataTable().destroy();
-                }
-
-                // Initialize DataTable with pagination
-                table.DataTable({
-                    pageLength: 10,
-                    lengthChange: true,
-                    searching: true,
-                    ordering: true,
-                    paging: true,
-                    dom: 'Bfrtip',
-                    buttons: [
-                        {
-                            extend: 'excelHtml5',
-                            text: 'Export to Excel',
-                            title: `${modal} Report`
-                        },
-                        {
-                            extend: 'pdfHtml5',
-                            text: 'Export to PDF',
-                            orientation: 'landscape',
-                            pageSize: 'A4',
-                            title: `${modal} Report`
-                        }
-                    ]
-                });
-
-                toastr.success(`${modal} data fetched successfully!`);
+            // Initialize DataTable with options
+            $table.DataTable({
+                pageLength: 10,
+                lengthChange: true,
+                searching: true,
+                ordering: true,
+                paging: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Export to Excel',
+                        title: `${modal} Report`
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        text: 'Export to PDF',
+                        orientation: 'landscape',
+                        pageSize: 'A4',
+                        title: `${modal} Report`
+                    }
+                ]
             });
-        }).fail(function (xhr) {
-            console.error(`Error loading ${modal}: ${xhr.status} ${xhr.statusText}`);
+
+            toastr.success(`${modal} data fetched successfully!`);
         });
+    }).fail(function (xhr) {
+        console.error(`Error loading ${modal}: ${xhr.status} ${xhr.statusText}`);
     });
+});
+
 }
                 dataGet();
 
@@ -893,7 +915,7 @@
                 const modal = $(this).data('modal'); // get modal name from data attribute
                 const id = $(this).data('id'); // get record ID
                 const baseUrl = "{{ url('/') }}"; // base URL (Blade will output Laravel base URL)
-
+                const currentRow = $(this);
                 if (confirm('Are you sure you want to delete this item?')) {
                     $.ajax({
                         url: `${baseUrl}/common-delete/${modal}/${id}`,
@@ -904,7 +926,7 @@
                         },
                         success: function(res) {
                             toastr.success(res.message || 'Deleted successfully.');
-                            location.reload(); // refresh the page or remove item from table
+                       currentRow.closest('tr').remove();
                         },
                         error: function(xhr) {
                             toastr.error('Failed to delete.');

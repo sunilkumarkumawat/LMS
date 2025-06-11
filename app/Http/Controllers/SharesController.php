@@ -58,7 +58,7 @@ class SharesController extends Controller
     }
 public function commonEdit(Request $request,$modal,$id)
     {
-        
+      // dd($modal);  
         $data =  $this->commonService->commonEdit($request,$modal,$id);
 
         $responseData = $data->getData();

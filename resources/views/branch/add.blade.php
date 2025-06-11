@@ -52,13 +52,14 @@
                                                 name="contact_person" data-required="true" placeholder="Enter Person Name"
                                                 value="{{ old('contact_person', $data->contact_person ?? '') }}" />
                                         </div>
-                                        <div class="col-sm-6 form-group">
-                                            <label for="mobile">Mobile Number <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" name="mobile" id="mobile"
-                                                data-required="true" data-type="mobile" placeholder="Enter Mobile No"
-                                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                                                value="{{ old('mobile', $data->mobile ?? '') }}" />
-                                        </div>
+                                      <div class="col-sm-6 form-group">
+    <label for="mobile">Mobile Number <span class="text-danger">*</span></label>
+    <input type="text" class="form-control" name="mobile" id="mobile"
+        data-required="true" data-type="mobile" placeholder="Enter Mobile No"
+        maxlength="10"
+        oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10)"
+        value="{{ old('mobile', $data->mobile ?? '') }}" />
+</div>
                                         <div class="col-sm-6 form-group">
                                             <label for="email">Email</label>
                                             <input type="text" class="form-control" id="email" name="email"

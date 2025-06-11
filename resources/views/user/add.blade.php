@@ -73,7 +73,7 @@
                                 </div>
 
 
-                                <form id="createCommon" enctype="multipart/form-data">
+                                <form id="createCommon" enctype="multipart/form-data"  data-step="1" data-total_steps="2">
                                     @if ($isEdit)
                                         <input type='hidden' value='{{ $data->id }}' name='id' />
                                     @endif
@@ -126,7 +126,8 @@
                                                             <label for="mobile">Mobile <span
                                                                     class="text-danger">*</span></label>
                                                             <input type="text" class="form-control" placeholder="Mobile"
-                                                                id="mobile" data-required="true" name="mobile"
+                                                                id="mobile" data-required="true" name="mobile" maxlength="10"
+                                                                oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10)"
                                                                 value="{{ old('mobile', $data->mobile ?? '') }}">
                                                         </div>
                                                     </div>
@@ -344,6 +345,8 @@
                 currentStep++;
                 showStep(currentStep);
                 $('#step-' + currentStep).find('small').remove();
+
+                   $('#createCommon').attr('data-step',currentStep);
             }
         });
 
@@ -351,6 +354,7 @@
             if (currentStep > 1) {
                 currentStep--;
                 showStep(currentStep);
+                  $('#createCommon').attr('data-step',currentStep);
             }
         });
 

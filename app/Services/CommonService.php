@@ -5,74 +5,67 @@ namespace App\Services;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Cache;
 use Auth;
+
 class CommonService
 {
-public function createCommon($request)
-{
-    $data = collect($request->all())->except(['modal_type', 'id'])->toArray();
-    $modal = $request->modal_type;
+    public function createCommon($request)
+    {
+        $data = collect($request->all())->except(['modal_type', 'id'])->toArray();
+        $modal = $request->modal_type;
 
-    if (!str_contains($modal, '\\')) {
-        $modal = 'App\\Models\\' . $modal;
-    }
-
-    try {
-        if (!class_exists($modal)) {
-            return response()->json(['message' => 'Invalid modal type'], 400);
+        if (!str_contains($modal, '\\')) {
+            $modal = 'App\\Models\\' . $modal;
         }
 
-        $modalName = class_basename($modal);
-
-        // 🔐 Handle password field
-        $this->handlePasswordField($data);
-
-        // 📂 Handle uploaded files
-        foreach ($request->allFiles() as $key => $file) {
-            if ($file->isValid()) {
-                $data[$key] = $this->handleFileUpload($file, $modalName);
-            }
-        }
-
-        // ✅ Update if ID exists
-        if ($request->filled('id')) {
-            $record = $modal::find($request->id);
-            if (!$record) {
-                return response()->json(['message' => $modalName . ' not found.'], 404);
+        try {
+            if (!class_exists($modal)) {
+                return response()->json(['message' => 'Invalid modal type'], 400);
             }
 
-            $record->update($data);
+            $modalName = class_basename($modal);
 
-            // ❌ Clear cache after update
-            Cache::forget('getAll_' . $modalName);
+            // 🔐 Handle password field
+            $this->handlePasswordField($data);
 
+            // 📂 Handle uploaded files
+            foreach ($request->allFiles() as $key => $file) {
+                if ($file->isValid()) {
+                    $data[$key] = $this->handleFileUpload($file, $modalName);
+                }
+            }
+
+            // ✅ Update if ID exists
+            if ($request->filled('id')) {
+                $record = $modal::find($request->id);
+                if (!$record) {
+                    return response()->json(['message' => $modalName . ' not found.'], 404);
+                }
+
+                $record->update($data);
+
+                return response()->json([
+                    'message' => $modalName . ' updated successfully.',
+                    'data' => $record,
+                    'modal' => $modalName,
+                    'method' => 'update'
+                ]);
+            } else {
+                $record = $modal::create($data);
+
+                return response()->json([
+                    'message' => $modalName . ' created successfully.',
+                    'data' => $record,
+                    'modal' => $modalName,
+                    'method' => 'create'
+                ], 201);
+            }
+        } catch (\Exception $e) {
             return response()->json([
-                'message' => $modalName . ' updated successfully.',
-                'data' => $record,
-                'modal' =>$modalName,
-                'method'=>'update'
-            ]);
-        } else {
-            $record = $modal::create($data);
-
-            // ❌ Clear cache after create
-            Cache::forget('getAll_' . $modalName);
-
-            return response()->json([
-                'message' => $modalName . ' created successfully.',
-                'data' => $record,
-                'modal' =>$modalName,
-                'method'=>'create'
-            ], 201);
+                'error' => 'Error: ' . $e->getMessage()
+            ], 500);
         }
-    } catch (\Exception $e) {
-        return response()->json([
-            'error' => 'Error: ' . $e->getMessage()
-        ], 500);
     }
-}
-
 
     public function deleteCommon(Request $request, $modal, $id)
     {
@@ -85,8 +78,7 @@ public function createCommon($request)
                 return response()->json(['message' => 'Invalid modal type'], 400);
             }
 
-                 $modalName = class_basename($modal);
-
+            $modalName = class_basename($modal);
             $record = $modal::find($id);
 
             if (!$record) {
@@ -95,10 +87,8 @@ public function createCommon($request)
 
             $record->delete();
 
-
-             Cache::forget('getAll_' . $modalName);
             return response()->json([
-                'message' => class_basename($modal) . ' deleted successfully.',
+                'message' => $modalName . ' deleted successfully.',
                 'data' => $record
             ], 200);
         } catch (\Exception $e) {
@@ -142,30 +132,25 @@ public function createCommon($request)
         }
     }
 
+    public function getAll(string $modal)
+    {
+        if (!$modal) {
+            throw new \InvalidArgumentException('modal_type is required');
+        }
 
+        // Save the base model name for later comparisons
+        $baseModalName = $modal;
 
-public function getAll(string $modal)
-{
-    if (!$modal) {
-        throw new \InvalidArgumentException('modal_type is required');
-    }
+        // Append full namespace if not provided
+        if (!str_contains($modal, '\\')) {
+            $modal = 'App\\Models\\' . $modal;
+        }
 
-    // Save the base model name for later comparisons
-    $baseModalName = $modal;
+        // Check if the model class exists
+        if (!class_exists($modal)) {
+            throw new \InvalidArgumentException('Invalid modal type');
+        }
 
-    // Append full namespace if not provided
-    if (!str_contains($modal, '\\')) {
-        $modal = 'App\\Models\\' . $modal;
-    }
-
-    // Check if the model class exists
-    if (!class_exists($modal)) {
-        throw new \InvalidArgumentException('Invalid modal type');
-    }
-
-    $cacheKey = 'getAll_' . class_basename($modal);
-
-    return Cache::remember($cacheKey, 60, function () use ($modal, $baseModalName) {
         $query = $modal::orderBy('id', 'desc');
 
         // Skip branch filtering for 'branch' and 'role' models
@@ -181,8 +166,8 @@ public function getAll(string $modal)
         }
 
         return $query->get();
-    });
-}
+    }
+
     private function handlePasswordField(&$data)
     {
         if (isset($data['password'])) {
@@ -195,11 +180,10 @@ public function getAll(string $modal)
         $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
         $path = $file->storeAs('public/' . $folder, $filename);
 
-      
         return str_replace('public/', 'storage/app/public/', $path);
     }
 
-     public function commonEdit(Request $request,$modal,$id)
+    public function commonEdit(Request $request, $modal, $id)
     {
         $modal = $modal;
         $id = $id;
@@ -223,9 +207,6 @@ public function getAll(string $modal)
                 return response()->json(['message' => 'Record not found'], 404);
             }
 
-
-          
-
             return response()->json([
                 'data' => $record
             ]);
@@ -236,24 +217,18 @@ public function getAll(string $modal)
         }
     }
 
-
     public function getDependentOptions($request)
-{
-    $modal = $request->input('modal');    // e.g., City
-    $field = $request->input('field');    // e.g., state_id
-    $value = $request->input('value');    // selected state_id value
+    {
+        $modal = $request->input('modal');    // e.g., City
+        $field = $request->input('field');    // e.g., state_id
+        $value = $request->input('value');    // selected state_id value
 
+        if (!class_exists($modelClass = "\\App\\Models\\$modal")) {
+            return response()->json([], 400);
+        }
 
+        $options = $modelClass::where($field, $value)->pluck('name', 'id');
 
-
-  
-    if (!class_exists($modelClass = "\\App\\Models\\$modal")) {
-        return response()->json([], 400);
+        return $options;
     }
-
-
-    $options = $modelClass::where($field, $value)->pluck('name', 'id');
-
-    return $options;
-}
 }

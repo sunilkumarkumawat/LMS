@@ -2,6 +2,7 @@
 @section('content')
 @php
 $isEdit = isset($student);
+
 @endphp
 <div class="content-wrapper">
     <section class="content">
@@ -73,7 +74,7 @@ $isEdit = isset($student);
                             </div>
                             <div class="card-body">
 
-                                <form id="createCommon" enctype="multipart/form-data">
+                                <form id="createCommon" enctype="multipart/form-data" data-step="1" data-total_steps="3">
                                     @if ($isEdit)
                                     <input type='hidden' value='{{ $student->id }}' name='id' />
                                     <input type='hidden' id="branch_id" name='branch_id'
@@ -100,7 +101,7 @@ $isEdit = isset($student);
                                                         <label>Admission No.</label>
                                                         <input type="text" class="form-control" id="admissionNo"
                                                             name="admission_no" placeholder="Admission No."
-                                                            value="{{ old('admission_no', $student->admission_no ?? '') }}">
+                                                            value="{{ old('admission_no', $data->admission_no ?? '') }}">
                                                     </div>
                                                 </div>
 
@@ -110,7 +111,7 @@ $isEdit = isset($student);
                                                                 style="color:red;">*</span></label>
                                                         <input type="text" name="student_name" id="student_name"
                                                             class="form-control invalid"
-                                                            value="{{ old('student_name', $student->student_name ?? '') }}"
+                                                            value="{{ old('student_name', $data->student_name ?? '') }}"
                                                             placeholder="Student Name" data-required="true">
                                                     </div>
                                                 </div>
@@ -119,7 +120,7 @@ $isEdit = isset($student);
                                                     @include('commoninputs.inputs', [
                                                     'modal' => 'Gender', // This decides the data source
                                                     'name' => 'gender_id',
-                                                    'selected' => $student->gender_id ?? null,
+                                                    'selected' => $data->gender_id ?? null,
                                                     'label' => 'Select Gender',
                                                     'required' => true,
                                                     ])
@@ -132,7 +133,7 @@ $isEdit = isset($student);
                                                         <input type="date" class="form-control" id="dob"
                                                             name="dob" placeholder="Date Of Birth"
                                                             data-required="true"
-                                                            value="{{ old('dob', $student->dob ?? '') }}">
+                                                            value="{{ old('dob', $data->dob ?? '') }}">
                                                     </div>
                                                 </div>
 
@@ -142,8 +143,9 @@ $isEdit = isset($student);
                                                                 style="color:red;">*</span></label>
                                                         <input type="text" class="form-control" id="mobile"
                                                             name="mobile" placeholder="Mobile No."
-                                                            data-required="true"
-                                                            value="{{ old('mobile', $student->mobile ?? '') }}">
+                                                            data-required="true" maxlength="10"
+                                                            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10)"
+                                                            value="{{ old('mobile', $data->mobile ?? '') }}">
                                                     </div>
                                                 </div>
 
@@ -153,7 +155,7 @@ $isEdit = isset($student);
                                                                 style="color:red;">*</span></label>
                                                         <input type="email" class="form-control" id="email"
                                                             name="email" placeholder="Email" data-required="true"
-                                                            value="{{ old('email', $student->email ?? '') }}">
+                                                            value="{{ old('email', $data->email ?? '') }}">
                                                     </div>
                                                 </div>
 
@@ -162,9 +164,9 @@ $isEdit = isset($student);
                                                         <label for="aadhaar">Aadhaar No. <span
                                                                 style="color:red;">*</span></label>
                                                         <input type="text" class="form-control" id="aadhaar"
-                                                            name="aadhaar" placeholder="Aadhaar No."
+                                                            name="aadhaar" placeholder="Aadhaar No." maxlength="12"
                                                             data-required="true"
-                                                            value="{{ old('aadhaar', $student->aadhaar ?? '') }}">
+                                                            value="{{ old('aadhaar', $data->aadhaar ?? '') }}">
                                                     </div>
                                                 </div>
 
@@ -173,7 +175,7 @@ $isEdit = isset($student);
                                                         <label for="admission_date">Date Of Admission</label>
                                                         <input type="date" class="form-control"
                                                             id="admission_date" name="admission_date"
-                                                            value="{{ old('admission_date', $student->admission_date ?? '') }}">
+                                                            value="{{ old('admission_date', $data->admission_date ?? '') }}">
                                                     </div>
                                                 </div>
 
@@ -184,7 +186,7 @@ $isEdit = isset($student);
                                                         <input type="text" class="form-control"
                                                             id="student_address" name="student_address"
                                                             placeholder="Students Address" data-required="true"
-                                                            value="{{ old('student_address', $student->student_address ?? '') }}">
+                                                            value="{{ old('student_address', $data->student_address ?? '') }}">
                                                     </div>
                                                 </div>
 
@@ -218,28 +220,28 @@ $isEdit = isset($student);
                                                                     name="religion" data-required="true">
                                                                     <option value="">Select</option>
                                                                     <option value="Hindu"
-                                                                        {{ old('religion', $student->religion ?? '') == 'Hindu' ? 'selected' : '' }}>
+                                                                        {{ old('religion', $data->religion ?? '') == 'Hindu' ? 'selected' : '' }}>
                                                                         Hindu</option>
                                                                     <option value="Islam"
-                                                                        {{ old('religion', $student->religion ?? '') == 'Islam' ? 'selected' : '' }}>
+                                                                        {{ old('religion', $data->religion ?? '') == 'Islam' ? 'selected' : '' }}>
                                                                         Islam</option>
                                                                     <option value="Sikh"
-                                                                        {{ old('religion', $student->religion ?? '') == 'Sikh' ? 'selected' : '' }}>
+                                                                        {{ old('religion', $data->religion ?? '') == 'Sikh' ? 'selected' : '' }}>
                                                                         Sikh</option>
                                                                     <option value="Buddhism"
-                                                                        {{ old('religion', $student->religion ?? '') == 'Buddhism' ? 'selected' : '' }}>
+                                                                        {{ old('religion', $data->religion ?? '') == 'Buddhism' ? 'selected' : '' }}>
                                                                         Buddhism</option>
                                                                     <option value="Adivasi"
-                                                                        {{ old('religion', $student->religion ?? '') == 'Adivasi' ? 'selected' : '' }}>
+                                                                        {{ old('religion', $data->religion ?? '') == 'Adivasi' ? 'selected' : '' }}>
                                                                         Adivasi</option>
                                                                     <option value="Jain"
-                                                                        {{ old('religion', $student->religion ?? '') == 'Jain' ? 'selected' : '' }}>
+                                                                        {{ old('religion', $data->religion ?? '') == 'Jain' ? 'selected' : '' }}>
                                                                         Jain</option>
                                                                     <option value="Christianity"
-                                                                        {{ old('religion', $student->religion ?? '') == 'Christianity' ? 'selected' : '' }}>
+                                                                        {{ old('religion', $data->religion ?? '') == 'Christianity' ? 'selected' : '' }}>
                                                                         Christianity</option>
                                                                     <option value="Other"
-                                                                        {{ old('religion', $student->religion ?? '') == 'Other' ? 'selected' : '' }}>
+                                                                        {{ old('religion', $data->religion ?? '') == 'Other' ? 'selected' : '' }}>
                                                                         Other</option>
                                                                 </select>
                                                             </div>
@@ -253,25 +255,25 @@ $isEdit = isset($student);
                                                                     name="category" data-required="true">
                                                                     <option value="">Select</option>
                                                                     <option value="OBC"
-                                                                        {{ old('category', $student->category ?? '') == 'OBC' ? 'selected' : '' }}>
+                                                                        {{ old('category', $data->category ?? '') == 'OBC' ? 'selected' : '' }}>
                                                                         OBC</option>
                                                                     <option value="ST"
-                                                                        {{ old('category', $student->category ?? '') == 'ST' ? 'selected' : '' }}>
+                                                                        {{ old('category', $data->category ?? '') == 'ST' ? 'selected' : '' }}>
                                                                         ST</option>
                                                                     <option value="SC"
-                                                                        {{ old('category', $student->category ?? '') == 'SC' ? 'selected' : '' }}>
+                                                                        {{ old('category', $data->category ?? '') == 'SC' ? 'selected' : '' }}>
                                                                         SC</option>
                                                                     <option value="BC"
-                                                                        {{ old('category', $student->category ?? '') == 'BC' ? 'selected' : '' }}>
+                                                                        {{ old('category', $data->category ?? '') == 'BC' ? 'selected' : '' }}>
                                                                         BC</option>
                                                                     <option value="GEN"
-                                                                        {{ old('category', $student->category ?? '') == 'GEN' ? 'selected' : '' }}>
+                                                                        {{ old('category', $data->category ?? '') == 'GEN' ? 'selected' : '' }}>
                                                                         GEN</option>
                                                                     <option value="SBC"
-                                                                        {{ old('category', $student->category ?? '') == 'SBC' ? 'selected' : '' }}>
+                                                                        {{ old('category', $data->category ?? '') == 'SBC' ? 'selected' : '' }}>
                                                                         SBC</option>
                                                                     <option value="Other"
-                                                                        {{ old('category', $student->category ?? '') == 'Other' ? 'selected' : '' }}>
+                                                                        {{ old('category', $data->category ?? '') == 'Other' ? 'selected' : '' }}>
                                                                         Other</option>
                                                                 </select>
                                                             </div>
@@ -282,7 +284,7 @@ $isEdit = isset($student);
                                                                 <label for="caste">Caste</label>
                                                                 <input type="text" class="form-control"
                                                                     id="caste" name="caste" placeholder="Caste"
-                                                                    value="{{ old('caste', $student->caste ?? '') }}">
+                                                                    value="{{ old('caste', $data->caste ?? '') }}">
                                                             </div>
                                                         </div>
 
@@ -290,7 +292,7 @@ $isEdit = isset($student);
                                                             @include('commoninputs.inputs', [
                                                             'modal' => 'BloodGroup', // This decides the data source
                                                             'name' => 'bloodgroup_id',
-                                                            'selected' => $student->bloodgroup_id ?? null,
+                                                            'selected' => $data->bloodgroup_id ?? null,
                                                             'label' => 'Select Blood Group',
                                                             'required' => false,
                                                             ])
@@ -304,7 +306,7 @@ $isEdit = isset($student);
                                                             @include('commoninputs.inputs', [
                                                             'modal' => 'Country', // This decides the data source
                                                             'name' => 'country_id',
-                                                            'selected' => $student->country_id ?? null,
+                                                            'selected' => $data->country_id ?? null,
                                                             'label' => 'Country',
                                                             'required' => true,
                                                             'attributes' => [
@@ -321,11 +323,11 @@ $isEdit = isset($student);
                                                             @include('commoninputs.dependentInputs', [
                                                             'modal' => 'State',
                                                             'name' => 'state_id',
-                                                            'selected' => $student->state_id ?? null,
+                                                            'selected' => $data->state_id ?? null,
                                                             'label' => 'State',
                                                             'required' => true,
-                                                            'isRequestSent' => isset($student->country_id),
-                                                            'dependentId' => $student->country_id ?? null,
+                                                            'isRequestSent' => isset($data->country_id),
+                                                            'dependentId' => $data->country_id ?? null,
                                                             'foreignKey' => 'country_id',
                                                             'attributes' => [
                                                             'data-dependent' => 'city_id',
@@ -341,11 +343,11 @@ $isEdit = isset($student);
                                                             @include('commoninputs.dependentInputs', [
                                                             'modal' => 'City',
                                                             'name' => 'city_id',
-                                                            'selected' => $student->city_id ?? null,
+                                                            'selected' => $data->city_id ?? null,
                                                             'label' => 'City',
                                                             'required' => true,
-                                                            'isRequestSent' => isset($student->state_id),
-                                                            'dependentId' => $student->state_id ?? null,
+                                                            'isRequestSent' => isset($data->state_id),
+                                                            'dependentId' => $data->state_id ?? null,
                                                             'foreignKey' => 'state_id',
                                                             ])
                                                         </div>
@@ -357,13 +359,13 @@ $isEdit = isset($student);
                                                                     name="village">
                                                                     <option value="">Select</option>
                                                                     <option value="Jaipur"
-                                                                        {{ old('village', $student->village ?? '') == 'Jaipur' ? 'selected' : '' }}>
+                                                                        {{ old('village', $data->village ?? '') == 'Jaipur' ? 'selected' : '' }}>
                                                                         Jaipur</option>
                                                                     <option value="Sanganer"
-                                                                        {{ old('village', $student->village ?? '') == 'Sanganer' ? 'selected' : '' }}>
+                                                                        {{ old('village', $data->village ?? '') == 'Sanganer' ? 'selected' : '' }}>
                                                                         Sanganer</option>
                                                                     <option value="Mansarovar"
-                                                                        {{ old('village', $student->village ?? '') == 'Mansarovar' ? 'selected' : '' }}>
+                                                                        {{ old('village', $data->village ?? '') == 'Mansarovar' ? 'selected' : '' }}>
                                                                         Mansarovar</option>
                                                                 </select>
                                                             </div>
@@ -375,7 +377,7 @@ $isEdit = isset($student);
                                                                 <input type="text" class="form-control"
                                                                     id="pincode" name="pincode"
                                                                     placeholder="Pin Code"
-                                                                    value="{{ old('pincode', $student->pincode ?? '') }}">
+                                                                    value="{{ old('pincode', $data->pincode ?? '') }}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -393,8 +395,8 @@ $isEdit = isset($student);
                                                         <label for="father_name">Father's Name <span
                                                                 style="color:red;">*</span></label>
                                                         <input type="text" class="form-control" id="father_name"
-                                                            name="father_name" placeholder="Father's Name"
-                                                            value="{{ old('father_name', $student->father_name ?? '') }}"
+                                                            name="father_name" placeholder="Father's Name" 
+                                                            value="{{ old('father_name', $data->father_name ?? '') }}"
                                                             data-required="true">
                                                     </div>
                                                 </div>
@@ -404,8 +406,8 @@ $isEdit = isset($student);
                                                         <label for="father_mobile">Father's Contact No <span
                                                                 style="color:red;">*</span></label>
                                                         <input type="text" class="form-control" id="father_mobile"
-                                                            name="father_mobile" placeholder="Father's Contact No"
-                                                            value="{{ old('father_mobile', $student->father_mobile ?? '') }}"
+                                                            name="father_mobile" placeholder="Father's Contact No" maxlength="10"
+                                                            value="{{ old('father_mobile', $data->father_mobile ?? '') }}"
                                                             data-required="true">
                                                     </div>
                                                 </div>
@@ -416,7 +418,7 @@ $isEdit = isset($student);
                                                         <input type="text" class="form-control"
                                                             id="father_occupation" name="father_occupation"
                                                             placeholder="Father's Occupation"
-                                                            value="{{ old('father_occupation', $student->father_occupation ?? '') }}">
+                                                            value="{{ old('father_occupation', $data->father_occupation ?? '') }}">
                                                     </div>
                                                 </div>
 
@@ -430,7 +432,7 @@ $isEdit = isset($student);
                                                                 <input type="text" class="form-control"
                                                                     id="mother_name" name="mother_name"
                                                                     placeholder="Mother's Name"
-                                                                    value="{{ old('mother_name', $student->mother_name ?? '') }}"
+                                                                    value="{{ old('mother_name', $data->mother_name ?? '') }}"
                                                                     data-required="true">
                                                             </div>
                                                         </div>
@@ -440,8 +442,8 @@ $isEdit = isset($student);
                                                                 <label for="mother_mobile">Mother's Contact No</label>
                                                                 <input type="text" class="form-control"
                                                                     id="mother_mobile" name="mother_mobile"
-                                                                    placeholder="Mother's Contact No"
-                                                                    value="{{ old('mother_mobile', $student->mother_mobile ?? '') }}">
+                                                                    placeholder="Mother's Contact No" maxlength="10"
+                                                                    value="{{ old('mother_mobile', $data->mother_mobile ?? '') }}">
                                                             </div>
                                                         </div>
 
@@ -452,7 +454,7 @@ $isEdit = isset($student);
                                                                 <input type="text" class="form-control"
                                                                     id="mother_occupation" name="mother_occupation"
                                                                     placeholder="Mother's Occupation"
-                                                                    value="{{ old('mother_occupation', $student->mother_occupation ?? '') }}">
+                                                                    value="{{ old('mother_occupation', $data->mother_occupation ?? '') }}">
                                                             </div>
                                                         </div>
 
@@ -464,7 +466,7 @@ $isEdit = isset($student);
                                                                 <input type="text" class="form-control"
                                                                     id="guardian_name" name="guardian_name"
                                                                     placeholder="Guardian's Name"
-                                                                    value="{{ old('guardian_name', $student->guardian_name ?? '') }}"
+                                                                    value="{{ old('guardian_name', $data->guardian_name ?? '') }}"
                                                                     data-required="true">
                                                             </div>
                                                         </div>
@@ -475,8 +477,8 @@ $isEdit = isset($student);
                                                                     <span style="color:red;">*</span></label>
                                                                 <input type="text" class="form-control"
                                                                     id="guardian_mobile" name="guardian_mobile"
-                                                                    placeholder="Guardian's Contact No"
-                                                                    value="{{ old('guardian_mobile', $student->guardian_mobile ?? '') }}"
+                                                                    placeholder="Guardian's Contact No"    maxlength="10"
+                                                                    value="{{ old('guardian_mobile', $data->guardian_mobile ?? '') }}"
                                                                     data-required="true">
                                                             </div>
                                                         </div>
@@ -489,19 +491,19 @@ $isEdit = isset($student);
                                                                     name="guardian_relation">
                                                                     <option value="">Select</option>
                                                                     <option value="Grandfather"
-                                                                        {{ old('guardian_relation', $student->guardian_relation ?? '') == 'Grandfather' ? 'selected' : '' }}>
+                                                                        {{ old('guardian_relation', $data->guardian_relation ?? '') == 'Grandfather' ? 'selected' : '' }}>
                                                                         Grandfather</option>
                                                                     <option value="Grandmother"
-                                                                        {{ old('guardian_relation', $student->guardian_relation ?? '') == 'Grandmother' ? 'selected' : '' }}>
+                                                                        {{ old('guardian_relation', $data->guardian_relation ?? '') == 'Grandmother' ? 'selected' : '' }}>
                                                                         Grandmother</option>
                                                                     <option value="Uncle"
-                                                                        {{ old('guardian_relation', $student->guardian_relation ?? '') == 'Uncle' ? 'selected' : '' }}>
+                                                                        {{ old('guardian_relation', $data->guardian_relation ?? '') == 'Uncle' ? 'selected' : '' }}>
                                                                         Uncle</option>
                                                                     <option value="Aunt"
-                                                                        {{ old('guardian_relation', $student->guardian_relation ?? '') == 'Aunt' ? 'selected' : '' }}>
+                                                                        {{ old('guardian_relation', $data->guardian_relation ?? '') == 'Aunt' ? 'selected' : '' }}>
                                                                         Aunt</option>
                                                                     <option value="Other"
-                                                                        {{ old('guardian_relation', $student->guardian_relation ?? '') == 'Other' ? 'selected' : '' }}>
+                                                                        {{ old('guardian_relation', $data->guardian_relation ?? '') == 'Other' ? 'selected' : '' }}>
                                                                         Other</option>
                                                                 </select>
                                                             </div>
@@ -512,7 +514,7 @@ $isEdit = isset($student);
                                                                 <label for="guardian_address">Guardian's Address <span
                                                                         style="color:red;">*</span></label>
                                                                 <textarea class="form-control" id="guardian_address" name="guardian_address" placeholder="Guardian's Address"
-                                                                    rows="2" data-required="true">{{ old('guardian_address', $student->guardian_address ?? '') }}</textarea>
+                                                                    rows="2" data-required="true">{{ old('guardian_address', $data->guardian_address ?? '') }}</textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -580,6 +582,8 @@ $isEdit = isset($student);
             currentStep++;
             showStep(currentStep);
             $('#step-' + currentStep).find('small').remove();
+
+             $('#createCommon').attr('data-step',currentStep);
         }
     });
 
@@ -589,6 +593,8 @@ $isEdit = isset($student);
         if (currentStep > 1) {
             currentStep--;
             showStep(currentStep);
+
+             $('#createCommon').attr('data-step',currentStep);
         }
     });
 
