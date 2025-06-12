@@ -799,7 +799,7 @@
                     const endpoint = "{{ url('/') }}/createCommon";
 
                     const formData = new FormData(this); // Handles files + inputs
-                 const modaltype = $('[name="modal_type"]').val();
+                 const modaltype = ($('[name="modal_type"]').val()).toLowerCase();
                     $.ajax({
                         url: endpoint,
                         type: 'POST',
@@ -809,8 +809,8 @@
                         success: function(response) {
 
                             if (response.method == 'update') {
-                                if(modaltype == 'User'){
-                                 window.location.href = "{{ url('/') }}/" + 'userView'
+                                if(['user', 'student'].includes(modaltype)){
+                                 window.location.href = "{{ url('/') }}/" + modaltype +'View'
                                   
                             }
                             else{
@@ -819,8 +819,8 @@
                                 return
                             }
                             }
-                            else if(modaltype == 'User'){
-                                 window.location.href = "{{ url('/') }}/" + 'userView'
+                            else if(['user', 'student'].includes(modaltype)){
+                                 window.location.href = "{{ url('/') }}/" + modaltype +'View'
                                   
                             }
                             else{
