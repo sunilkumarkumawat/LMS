@@ -37,7 +37,7 @@
                                     <div id="expense-container" class="bg-item mb-3 border p-3 rounded">
                                         <div class="row">
                                             <div class="col-md-12 col-12 form-group">
-                                                <label for="name"> Role Name <span class="text-danger">*</span></label>
+                                                <label for="role_name"> Role Name <span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" id="role_name" name="name" placeholder="Enter Role Name" data-required='true'
                                                  value="{{ old('name', $data->name ?? '') }}">     
                                             </div>

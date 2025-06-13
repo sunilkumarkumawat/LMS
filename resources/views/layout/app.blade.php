@@ -523,6 +523,11 @@
                                     }
                                     break;
 
+                                    case 'role_name"':
+                                    if (value === '') {
+                                        message = 'Role is required.';
+                                    }
+
                                 case 'branch_code':
                                     if (value === '') {
                                         message = 'Branch code is required.';
@@ -538,15 +543,12 @@
                                         message = 'Contact Person is required.';
                                     }
                                     break;
-                                case 'name':
-                                    if (value === '') {
-                                        message = 'Role name is required.';
-                                    }
+                                
 
-                                case 'role_id':
-                                    if (value === '') {
-                                        message = 'Role is required.';
-                                    }
+                                // case 'role_name"':
+                                //     if (value === '') {
+                                //         message = 'Role is required.';
+                                //     }
                                     break;
                                 case 'first_name':
                                     if (value === '') {
@@ -730,6 +732,11 @@
                                 case 'plan_name':
                                     if (value === '') {
                                         message = 'Plan Name is required';
+                                    }
+                                    break;
+                                case 'msg_type_name':
+                                    if (value === '') {
+                                        message = 'Message Type Name is required';
                                     }
                                     break;
                             }
